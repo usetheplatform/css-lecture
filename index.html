@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>[Typescript] Bootcamp - Lecture - CSS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/@shower/material/styles/styles.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <style>
+        .shower {
+            --slide-ratio: calc(16 / 9);
+            --color-key: #4390e1;
+        }
+    </style>
+</head>
+<body class="shower list">
+
+    <header class="caption">
+        <h1>✨ CSS</h1>
+        <p>
+            by <a href="">Anatoliy Belobrovik</a>
+        </p>
+    </header>
+
+    <section class="slide">
+        <h2>📝 Lecture plan</h2>
+        <ul>
+            <li value="✏️">CSS Cascade. CSS Specificity</li>
+            <li value="✏️">CSS Modules & CSS-in-JS</li>
+            <li value="✏️">CSS Custom Properties</li>
+            <li value="✏️">CSS Layouts — Flexbox & Grid</li>
+            <li value="✏️">PostCSS</li>
+        </ul>
+    </section>
+
+    <section class="slide" data-timing="00:03">
+        <h2 class="shout">CSS Cascade</h2>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 1/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>section p {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>.p1 {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                    <code class="green next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                    <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of section p is 0.0.0.0.2 and <mark>.p1 is 0.0.0.1.0</mark></p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 2/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>.section p {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>.p1 {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                    <code class="red next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                    <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of <mark>.section1 p is 0.0.0.1.1</mark> and .p1 is 0.0.0.1.0</p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 3/8</h2>
+        <div class="columns two">
+            <pre>
+                <code>#section {</code>
+                <code>  color: <span class="box red"></span> red;</code>
+                <code>}</code>
+                <code>.p1 {</code>
+                <code>  color: <span class="box green"></span> green;</code>
+                <code>}</code>
+        </pre>
+            <pre>
+                <code>&lt;section class="section" id="section"&gt;</code>
+                <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                <code class="green next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                <code>&lt;/section&gt;</code>
+        </pre>
+        </div>
+        <p class="note next">💡 p would inherit its parent's color only if there is no color applied directly to
+            paragraphs
+        </p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 4/8</h2>
+        <div class="columns two">
+            <pre>
+                <code>#section * {</code>
+                <code>  color: <span class="box red"></span> red;</code>
+                <code>}</code>
+                <code>.p1 {</code>
+                <code>  color: <span class="box green"></span> green;</code>
+                <code>}</code>
+        </pre>
+            <pre>
+                <code>&lt;section class="section" id="section"&gt;</code>
+                <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                <code class="red next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                <code>&lt;/section&gt;</code>
+        </pre>
+        </div>
+        <p class="note next">💡 The specificity of <mark>#section1 * is 0.0.1.0.0</mark> and .p1 is 0.0.0.1.0</p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 5/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>section * {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>p {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                    <code class="green next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                    <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of section * is 0.0.0.0.1. The specificity of <mark>p is also 0.0.0.0.1
+                but
+                it comes later in the stylesheet</mark>.</p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 6/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>section .p1 {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>section :nth-child(2) {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                    <code class="green next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                    <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of section .p1 is 0.0.0.1.1. The specificity of <mark>section
+                :nth-child(2)
+                is also 0.0.0.1.1 but it comes later in the stylesheet</mark>.</p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 7/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>section > p {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>section p {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code>  &lt;h1&gt;Title&lt;/h1&gt;</code>
+                    <code class="green next">  &lt;p class="p1"&gt;Paragraph 1&lt;/p&gt;</code>
+                    <code>  &lt;p class="p2"&gt;Paragraph 2&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of section > p is 0.0.0.0.2. The specificity of <mark>section p is also
+                0.0.0.0.2 but it comes later in the stylesheet</mark>.</p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Specificity Quiz 8/8</h2>
+        <div class="columns two">
+            <pre>
+                    <code>.red {</code>
+                    <code>  color: <span class="box red"></span> red;</code>
+                    <code>}</code>
+                    <code>.green {</code>
+                    <code>  color: <span class="box green"></span> green;</code>
+                    <code>}</code>
+            </pre>
+            <pre>
+                    <code>&lt;section class="section" id="section"&gt;</code>
+                    <code class="green next">  &lt;p class="red green"&gt;Paragraph&lt;/p&gt;</code>
+                    <code>&lt;/section&gt;</code>
+            </pre>
+        </div>
+        <p class="note next">💡 The specificity of .red is 0.0.0.1.0. The specificity of <mark>.green is also 0.0.0.1.0
+                but
+                it comes later in the stylesheet</mark>.</p>
+    </section>
+
+    <section class="slide">
+        <h2>🤓 CSS Cascade definition</h2>
+        <figure>
+            <blockquote>
+                <p>The cascade takes an unordered list of declared values for a given property on a given element, sorts
+                    them by their declaration’s precedence as determined below, and outputs a single cascaded value.</p>
+            </blockquote>
+
+            <figcaption><a href="https://drafts.csswg.org/css-cascade/#cascading">CSS WG</a></figcaption>
+        </figure>
+    </section>
+
+    <section class="slide">
+        <h2>Cascade sorting order</h2>
+        <ul>
+            <li value="👉">Origin and Importance</li>
+            <li value="👉">Context</li>
+            <li value="👉">Specificity</li>
+            <li value="👉">Order of Appearance</li>
+        </ul>
+        <p class="note" lang="ru">
+            <a href="https://css-live.ru/css/nikto-ne-znaet-css-specifichnost-ne-kaskad.html">
+                «Никто не знает CSS: специфичность — не каскад» — Илья Стрельцин
+            </a>
+        </p>
+    </section>
+
+    <section class="slide">
+        <h2>Origin and Importance</h2>
+        <ol>
+            <li>Transition declarations</li>
+            <li>!important user agent declarations</li>
+            <li>!important user declarations</li>
+            <li>!important author declarations</li>
+            <li>Animation declarations</li>
+            <li>Normal author declarations</li>
+            <li>Normal user declarations</li>
+            <li>Normal user agent declarations</li>
+        </ol>
+    </section>
+
+    <section class="slide clear">
+        <h2>Specificity</h2>
+
+        <img style="height: 25rem; margin-top: 2rem;" class="cover" src="pictures/specificity.png" alt="">
+        <p class="note place bottom" style="left: 20%;">
+            <a href="https://specificity.keegan.st">Specificity Calculator</a>
+        </p>
+    </section>
+
+    <section class="slide">
+        <h2>Order of Appearance</h2>
+        <p>The last declaration in document order wins.</p>
+    </section>
+
+    <section class="slide" data-timing="00:03">
+        <h2 class="shout">CSS Modules</h2>
+    </section>
+
+    <section class="slide clear">
+        <h2>🙅 🚓👮</h2>
+        <pre class="place bottom">
+            <code>
+                body { ... }
+                body div.content div.container { ... }
+                body div.content div.container div.articles { ... }
+                body div.content div.container div.articles > div.post { ... }
+                body div.content div.container div.articles > div.post div.title { ... }
+                body div.content div.container div.articles > div.post div.title h1 { ... }
+                body div.content div.container div.articles > div.post div.content { ... }
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>☄️ Existing solutions</h2>
+
+        <ul>
+            <li value="👉" class="next">
+                Naming conventions & frameworks
+                <div class="columns two">
+                    <ul>
+                        <li>BEM</li>
+                        <li>Atomic CSS</li>
+                    </ul>
+                    <ul>
+                        <li>Block__Element-Modifier</li>
+                        <li>.bg-gray-100.py-6.flex</li>
+                    </ul>
+                </div>
+            </li>
+            <li value="👉" class="next">W3C CSS Scoping Module (Shadow DOM)</li>
+            <li value="👉" class="next">CSS-in-JS</li>
+            <li value="👉" class="next">... and many more</li>
+        </ul>
+    </section>
+
+    <section class="slide clear">
+        <h2>CSS Modules & CSS-in-JS</h2>
+        <img class="place center cover" src="pictures/logos.png" alt="">
+
+        <p class="note place bottom" lang="ru">
+            <a href="https://www.youtube.com/watch?v=8URAubG1HQw">
+                «В поисках Стилевого Грааля» — Артур Кенжаев
+            </a>
+        </p>
+    </section>
+
+
+    <section class="slide">
+        <h2><a href="https://github.com/css-modules/css-modules">CSS Modules</a></h2>
+        <h3>... are local by default 📦</h3>
+        <pre>
+            <code class="next"><span class="magenta">.Block</span> { background-color: <span class="box plum"></span> <span class="orange">plum</span>; } <span class="comment">// declare css</span></code>
+
+            <code class="next"><span class="magenta">import</span> styles <span class="magenta">from</span> <span class="greeny">"./styles.module.css"</span> <span class="comment">// import a css module</span></code>
+            <code class="next"><span class="magenta">function</span> Block() { <span class="comment">// apply the class name</span></code>
+            <code class="next blue">  <span class="magenta">return</span> &lt;div <span class="dark-orange">class</span>={styles.Block}&gt;<span style="color: black;">Component</span>&lt;/div&gt;</code>
+            <code class="next">}</code>
+            
+            <code class="next blue">&lt;div <span class="dark-orange">class</span>=<mark class="greeny">"Block-9gbnd5"</mark>&gt;<span style="color: black;">Component</span>&lt;/div&gt;<span class="comment">// result</span></code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Modules</h2>
+        <ul>
+            <li value="👍" class="next">Solution to global scoping</li>
+            <li value="👍" class="next">"Native" CSS</li>
+            <li value="👍" class="next">Server-side rendering</li>
+            <li value="👎" style="margin-top: 2rem;" class="next">Building step is required (and some tweaking may be needed)</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2><a href="https://styled-components.com">Styled Components</a></h2>
+        <pre>
+            <code class="next"><span class="magenta">import</span> styled <span class="magenta">from</span> <span class="greeny">"styled-components"</span></code>
+            <code class="next"><span class="magenta">let</span> Block = styled.<span class="blue">div</span><span class="greeny">`</span></code>
+            <code class="next">  background-color: <span class="box plum"></span> <span class="orange">plum</span>;</code>
+            <code class="next greeny">`</code>
+            <code class="next"><span class="magenta">function</span> Component() {</code>
+            <code class="next blue">  <span class="magenta">return</span> &lt;Block&gt;<span style="color: black;">Component</span>&lt;/Block&gt;</code>
+            <code class="next">}</code>
+            
+            <code class="next blue">&lt;div <span class="dark-orange">class</span>=<mark class="greeny">"Block-9gbnd5"</mark>&gt;<span style="color: black;">Component</span>&lt;/div&gt;<span class="comment">// result</span></code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>... all might of JS 💪</h2>
+        <pre>
+            <code><span class="magenta">import</span> styled, { css } <span class="magenta">from</span> <span class="greeny">"styled-components"</span></code>
+
+            <code><span class="magenta">let</span> Button = styled.<span class="blue">button</span><span class="greeny">`</span></code>
+            <code>  background: <span class="box black"></span> <span class="orange">black</span>;</code>
+            <code>  color: <span class="box white"></span> <span class="orange">white</span>;</code>
+            <code class="mark next">  ${props => props.primary <span class="magenta">&&</span> <span class="blue">css</span><span class="greeny">`</span></code>
+            <code>    background: <span class="box white"></span> <span class="orange">white</span>;</code>
+            <code>    color: <span class="box black"></span> <span class="orange">black</span>;</code>
+            <code>  <span class="greeny">`</span>}</code>
+            <code class="greeny">`</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Styled Components</h2>
+        <ul>
+            <li value="👍" class="next">Solution to global scoping</li>
+            <li value="👍" class="next">Variables, functions, all might of JS</li>
+            <li value="👍" class="next">Easy to make Critical Path CSS</li>
+            <li value="👍" class="next">Server-side rendering</li>
+            <li value="👍" class="next">Compilation step is optional</li>
+            <li value="🤔" style="margin-top: 2rem;" class="next">If you skip the compilation step, the css will be generated right at runtime.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2 class="shout">CSS Custom Properties</h2>
+    </section>
+
+    <section class="slide">
+        <h2><a href="https://www.smashingmagazine.com/2017/04/start-using-css-custom-properties/">CSS Custom Properties</a></h2>
+        <pre>
+            <code><span class="magenta">:root</span> {</code>
+            <code>  --bg-color: <span class="box plum"></span> <span class="orange">plum</span>; <span class="comment">// declare a custom variable</span></code>
+            <code>  --base-padding: <span class="blue">0.5</span><span class="magenta">rem</span>;</code>
+            <code>}</code>
+
+            <code><span class="magenta">.Component</span> {</code>
+            <code>  background-color: <span class="blue">var</span>(--bg-color); <span class="comment">// use the custom variable</span></code>
+            <code>  padding: <span class="blue">calc</span>(<span class="blue">2</span> <span class="magenta">*</span> <span class="blue">var</span>(--base-padding));</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>👨‍💻 [Practice] CSS Custom Properties</h2>
+        <ol>
+            <li>Convert it to CSS Custom Properties</li>
+            <li>(optional) Make it responsive - change base font size on different screen sizes</li>
+        </ol>
+        <p class="note"><a rel="noreferrer noopener" target="_blank" href="https://type-scale.com">type-scale.com</a></p class="note">
+    </section>
+
+    <section class="slide">
+        <h2>Comparison to CSS preprocessors</h2>
+        <div class="columns two">
+            <div>
+                <h3>Preprocessors variables are...</h3>
+                <ul>
+                    <li value="👉">Both global & local</li>
+                    <li value="👉">Static</li>
+                    <li value="👉">Not flexible</li>
+                </ul>
+            </div>
+            <div>
+                <h3>CSS Custom Properties are...</h3>
+                <ul>
+                    <li value="👉">Global</li>
+                    <li value="👉">Dynamic</li>
+                    <li value="👉">Accessible from JS land</li>
+                    <li value="👉">CSS as API</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Custom Properties usecases</h2>
+        <ul>
+            <li value="👉" class="next">Emulate non-existing CSS properties</li>
+            <li value="👉" class="next">Create color themes</li>
+            <li value="👉" class="next">Use it with JavaScript (e.g. animation)</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>JavaScript API</h2>
+
+        <pre>
+            <code class="next"><span class="magenta">let</span> element = document.<span class="blue">querySelector</span>(<span class="greeny">"#element"</span>)</code>
+            <code class="next"><span class="magenta">let</span> styles = <span class="blue">getComputedStyle</span>(element)</code>
+            <code class="next"><span class="magenta">let</span> size = +styles.<span class="blue">getPropertyValue</span>(<span class="greeny">"--base-size"</span>)</code>
+            <code class="next">element.style.<span class="blue">setProperty</span>(<span class="greeny">"--base-size"</span>, size <span class="magenta">+</span> <span class=blue>4</span>)</code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h2>CSS Custom Properties</h2>
+        <ul>
+            <li value="👍" class="next">Native solution</li>
+            <li value="👍" class="next">Obeyed to CSS Cascade</li>
+            <li value="👍" class="next">Dynamic nature</li>
+            <li value="👍" class="next">Accessible via JS</li>
+            <li value="👍" class="next">Could be pollyfilled in some base cases</li>
+            <li value="👍" class="next">Good compilation target</li>
+            <li value="🤔" style="margin-top: 2rem;" class="next"><a href="https://lisilinhart.info/posts/css-variables-performance/">Performance</a></li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2 class="shout">CSS Layouts Flexbox & Grid</h2>
+    </section>
+
+    <section class="slide">
+        <h2>Responsive Design could be achived with...</h2>
+        <div class="columns two">
+            <ul>
+                <li value="👉">Typography</li>
+                <li value="👉">Media</li>
+                <li value="👉">Meta tag viewport</li>
+                <li value="👉">Media Queries</li>
+            </ul>
+            <ul>
+                <li value="👉"><strong>CSS Flexbox</strong></li>
+                <li value="👉"><strong>CSS Grids</strong></li>
+                <li value="👉"><a href="https://www.youtube.com/watch?v=bP3ceQEXMhU">CSS Container Queries</a></li>
+            </ul>
+        </div>
+       
+    </section>
+
+    <section class="slide">
+        <h2>CSS Flexbox API</h2>
+        <ul>
+            <li>flex-direction</li>
+            <li>justify-content</li>
+            <li>align-items</li>
+            <li>order</li>
+            <li>flex-grow, flex-shrink, flex-basis</li>
+            <li>flex-wrap</li>
+            <li>align-content</li>
+        </ul>
+        <p class="note"><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">A Guide to Flexbox</a></p>
+    </section>
+
+    <section class="slide">
+        <h2>initial state</h2>
+        <pre>
+            <code>&lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"container"</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;First&lt;/<span class="blue">div</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;Second&lt;/<span class="blue">div</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;Third&lt;/<span class="blue">div</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;Fourth&lt;/<span class="blue">div</span>&gt;</code>
+            <code>&lt;/<span class="blue">div</span>&gt;</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>initial state</h2>
+        <div class="flex-container">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>display: flex</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+                <code>    display: <mark class="greeny">flex</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>display: flex</h2>
+        <div class="flex-container" style="display: flex;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: row-reverse</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    flex-direction: <mark class="greeny">row-reverse</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: row-reverse</h2>
+        <div class="flex-container" style="display: flex; flex-direction: row-reverse;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: column</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    flex-direction: <mark class="greeny">column</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: column</h2>
+        <div class="flex-container" style="display: flex; flex-direction: column;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: column-reverse</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    flex-direction: <mark class="greeny">column-reverse</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-direction: column-reverse</h2>
+        <div class="flex-container" style="display: flex; flex-direction: column-reverse;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: flex-start (default)</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">flex-start</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: flex-start (default)</h2>
+        <div class="flex-container" style="display: flex; justify-content: flex-start;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: center</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">center</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: center</h2>
+        <div class="flex-container" style="display: flex; justify-content: center;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: flex-end</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">flex-end</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: flex-end</h2>
+        <div class="flex-container" style="display: flex; justify-content: flex-end;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-between</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">space-between</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-between</h2>
+        <div class="flex-container" style="display: flex; justify-content: space-between;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-around</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">space-around</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-around</h2>
+        <div class="flex-container" style="display: flex; justify-content: space-around;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-evenly</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    justify-content: <mark class="greeny">space-evenly</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>justify-content: space-evenly</h2>
+        <div class="flex-container" style="display: flex; justify-content: space-evenly;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: stretch (default)</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <mark class="greeny">stretch</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: stretch (default)</h2>
+        <div class="flex-container" style="display: flex; align-items: stretch;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: flex-start</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <mark class="greeny">flex-start</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: flex-start</h2>
+        <div class="flex-container" style="display: flex; align-items: flex-start;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: center</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <mark class="greeny">center</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: center</h2>
+        <div class="flex-container" style="display: flex; align-items: center;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: flex-end</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <mark class="greeny">flex-end</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-items: flex-end</h2>
+        <div class="flex-container" style="display: flex; align-items: flex-end;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <pre>
+                <code><span class="magenta">.container</span> {</code>
+                <code>    display: <span class="greeny">flex</span>;</code>
+                <code>    align-items: <mark class="greeny">center</mark>;</code>
+                <code>}</code>
+                <code><span class="magenta">.item:nth-child</span>(<span class="blue">1</span>) {</code>
+                <code>    align-self: <mark class="greeny">flex-start</mark>;</code>
+                <code>}</code>
+                <code><span class="magenta">.item:nth-child</span>(<span class="blue">4</span>) {</code>
+                <code>    align-self: <mark class="greeny">flex-end</mark>;</code>
+                <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-self</h2>
+        <div class="flex-container" style="display: flex; align-items: center;">
+            <div class="flex-item" style="align-self: flex-start;">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item" style="align-self: flex-end;">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>Order</h2>
+        <pre style="font-size: 1.3rem;">
+                <code><span class="magenta">.item</span> {</code>
+                <code>    order: <mark class="blue">1</mark>;</code>
+                <code>}</code>
+                <code><span class="magenta">.item:nth-child</span>(<span class="blue">1</span>) {</code>
+                <code>    order: <mark class="blue">2</mark>;</code>
+                <code>}</code>
+                <code><span class="magenta">.item:nth-child</span>(<span class="blue">4</span>) {</code>
+                <code>    order: <mark class="blue">-1</mark>;</code>
+                <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Order</h2>
+        <div class="flex-container" style="display: flex;">
+            <div class="flex-item" style="order: 2;">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item" style="order: -1;">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-grow</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>}</code>
+            <code><span class="magenta">.item</span> {</code>
+            <code>    flex-grow: <span class="blue">0</span>; <span class="comment">/* By default */</span></code>
+            <code>    flex-grow: <span class="blue">1</span>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-grow</h2>
+        <div class="flex-container" style="display: flex;">
+            <div class="flex-item" style="flex-grow: 1;">First</div>
+            <div class="flex-item" style="flex-grow: 1;">Second</div>
+            <div class="flex-item" style="flex-grow: 1;">Third</div>
+            <div class="flex-item" style="flex-grow: 1;">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>}</code>
+            <code><span class="magenta">.item</span> {</code>
+            <code>    flex-grow: <span class="blue">1</span>;</code>
+            <code>}</code>
+            <code><span class="magenta">.item:nth-child</span>(<span class="blue">1</span>) {</code>
+            <code>    flex-grow: <span class="blue">3</span>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-grow</h2>
+        <div class="flex-container" style="display: flex;">
+            <div class="flex-item" style="flex-grow: 3;">First</div>
+            <div class="flex-item" style="flex-grow: 1;">Second</div>
+            <div class="flex-item" style="flex-grow: 1;">Third</div>
+            <div class="flex-item" style="flex-grow: 1;">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-shrink</h2>
+        <a href="https://codesandbox.io/s/flexbox-demo-dhyvb?file=/index.html">Codesandbox</a>
+    </section>
+
+    <section class="slide">
+        <h2>flex-basis</h2>
+        <a href="https://codesandbox.io/s/flexbox-demo-dhyvb?file=/index.html">Codesandbox</a>
+        <p class="note"><a href="https://medium.com/@stasonmars/разница-между-width-и-flex-basis-f34e658ce6a2">Difference between flex-basis and width</a></p>
+    </section>
+
+    <section class="slide">
+        <h2>flex-wrap: nowrap</h2>
+        <div class="flex-container" style="display: flex; align-items: flex-start;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+            <div class="flex-item">Fifth</div>
+            <div class="flex-item">Sixth</div>
+            <div class="flex-item">Seventh</div>
+            <div class="flex-item">Eigth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>flex-wrap: wrap</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <span class="greeny">flex-start</span>;</code>
+            <code>    flex-wrap: <mark class="greeny">wrap</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>flex-wrap: wrap</h2>
+        <div class="flex-container" style="display: flex; align-items: flex-start; flex-wrap: wrap;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+            <div class="flex-item">Fifth</div>
+            <div class="flex-item">Sixth</div>
+            <div class="flex-item">Seventh</div>
+            <div class="flex-item">Eigth</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>align-content</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">flex</span>;</code>
+            <code>    align-items: <span class="greeny">flex-start</span>;</code>
+            <code>    flex-wrap: <span class="greeny">wrap</span>;</code>
+            <code>    align-content: <mark class="greeny">center</mark>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>align-content</h2>
+        <div class="flex-container" style="display: flex; align-items: flex-start; flex-wrap: wrap; align-content: center;">
+            <div class="flex-item">First</div>
+            <div class="flex-item">Second</div>
+            <div class="flex-item">Third</div>
+            <div class="flex-item">Fourth</div>
+            <div class="flex-item">Fifth</div>
+            <div class="flex-item">Sixth</div>
+            <div class="flex-item">Seventh</div>
+            <div class="flex-item">Eigth</div>
+          </div>
+    </section>
+
+  
+    <section class="slide">
+        <h2>👨‍💻 [Practice] Flexbox</h2>
+        <h3>👉 Implement Calendar component with CSS Flexbox</h3>
+        <a href="https://codesandbox.io/s/layout-practice-uwty8">Codesandbox</a>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Grid API</h2>
+        <div class="columns two">
+            <ul>
+                <li>grid-template-columns</li>
+                <li>grid-template-rows</li>
+                <li>grid-column</li>
+                <li>grid-row</li>
+                <li>grid-template-area / grid-area</li>
+                <li>gap</li>
+            </ul>
+            <ul>
+                <li>align-items</li>
+                <li>justify-content</li>
+                <li>align-content</li>
+                <li>grid-auto-columns</li>
+                <li>grid-auto-rows</li>
+                <li>grid-auto-flow</li>
+            </ul>
+        </div>
+        <p class="note"><a href="https://css-tricks.com/snippets/css/complete-guide-grid/">Complete guide to Grid</a></p>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Grid Terminology</h2>
+        <ul>
+            <li>Grid lines</li>
+            <li>Grid tracks</li>
+            <li>Grid areas</li>
+            <li>Grid cell</li>
+            <li style="margin-top: 1rem;">Explicit grid</li>
+            <li>Implicit grid</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Grid lines</h2>
+        <img class="cover" src="/slides/material/pictures/grid-lines.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2>Grid row (track)</h2>
+        <img class="cover" src="/slides/material/pictures/grid-row.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2>Grid column (track)</h2>
+        <img class="cover" src="/slides/material/pictures/grid-column.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2>Grid area</h2>
+        <img class="cover" src="/slides/material/pictures/grid-area.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2>Grid cell</h2>
+        <img class="cover" src="/slides/material/pictures/grid-cell.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2>initial state</h2>
+        <pre>
+            <code>&lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"container"</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;First&lt;/<span class="blue">div</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;Second&lt;/<span class="blue">div</span>&gt;</code>
+            <code>    &lt;<span class="blue">div</span> <span class="orange">class</span>=<span class="greeny">"item"</span>&gt;Third&lt;/<span class="blue">div</span>&gt;</code>
+            <code>&lt;/<span class="blue">div</span>&gt;</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>initial state</h2>
+        <div class="grid-container">
+            <div class="grid-item" style="margin: 0.5rem;">First</div>
+            <div class="grid-item" style="margin: 0.5rem;">Second</div>
+            <div class="grid-item" style="margin: 0.5rem;">Third</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>display: grid</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">grid</span>;</code>
+            <code>    gap: <span class="blue">0.5</span><span class="magenta">rem</span>; <span class="comment">/* row-gap column-gap */</span></code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>display: grid</h2>
+        <div class="grid-container" style="display: grid;">
+            <div class="grid-item">First</div>
+            <div class="grid-item">Second</div>
+            <div class="grid-item">Third</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>grid-template-columns: 1fr 1fr</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">grid</span>;</code>
+            <code>    grid-template-columns: <span class="blue">1</span><span class="magenta">fr</span> <span class="blue">1</span><span class="magenta">fr</span>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>grid-template-columns: 1fr 1fr</h2>
+        <div class="grid-container" style="display: grid; gap: 0.5rem; grid-template-columns: 1fr 1fr;">
+            <div class="grid-item">First</div>
+            <div class="grid-item">Second</div>
+            <div class="grid-item">Third</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>grid-template-rows: 1fr 1.5fr 2fr</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">grid</span>;</code>
+            <code>    grid-template-rows: <span class="blue">1</span><span class="magenta">fr</span> <span class="blue">1.5</span><span class="magenta">fr</span> <span class="blue">2</span><span class="magenta">fr</span>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>grid-template-rows: 1fr 1.5fr 2fr</h2>
+        <div class="grid-container" style="display: grid; gap: 0.5rem; grid-template-rows: 1fr 1.5fr 2fr;">
+            <div class="grid-item">First</div>
+            <div class="grid-item">Second</div>
+            <div class="grid-item">Third</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">grid</span>;</code>
+            <code>    grid-template-rows: <span class="blue">1</span><span class="magenta">fr</span> <span class="blue">1.5</span><span class="magenta">fr</span>;</code>
+            <code>    grid-template-columns: <span class="blue">1</span><span class="magenta">fr</span> <span class="blue">2</span><span class="magenta">fr</span> <span class="blue">1</span><span class="magenta">fr</span>;</code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <div class="grid-container" style="display: grid; gap: 0.5rem; grid-template-rows: 1fr 1.5fr; grid-template-columns: 1fr 2fr 1fr;">
+            <div class="grid-item">First</div>
+            <div class="grid-item">Second</div>
+            <div class="grid-item">Third</div>
+            <div class="grid-item">Fourth</div>
+          </div>
+    </section>
+
+    <section class="slide" style="font-size: 1.3rem;">
+        <h2>grid-rows / grid-columns</h2>
+        <pre>
+            <code><span class="magenta">.container</span> {</code>
+            <code>    display: <span class="greeny">grid</span>;</code>
+            <code>    grid-template-rows: repeat(4, 1fr);</code>
+            <code>    grid-template-columns: 1fr 1fr;</code>
+            <code>}</code>
+            <code><span class="magenta">.item:nth-child(1)</span> {</code>
+            <code>    grid-row: <span class="greeny">1 / 3</span>; <span class="comment">/* grid-row-start / grid-row-end */</span></code>
+            <code>    grid-column: <span class="greeny">span 2</span>; <span class="comment">/* grid-column-start / grid-column-end */</span></code>
+            <code>}</code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>grid-rows / grid-columns</h2>
+        <div class="grid-container" style="display: grid; gap: 0.5rem; grid-template-rows: repeat(4, 1fr); grid-template-columns: 1fr 1fr;">
+            <div class="grid-item" style="grid-row: 1 / 3; grid-column: span 2;">First</div>
+            <div class="grid-item">Second</div>
+            <div class="grid-item">Third</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <h2>grid-template-area</h2>
+        <div class="grid-container" style="display: grid; gap: 0.5rem;">
+            <div class="grid-item">Header</div>
+            <div class="grid-item">Sidebar</div>
+            <div class="grid-item">Content</div>
+            <div class="grid-item">Footer</div>
+          </div>
+    </section>
+
+    <section class="slide">
+        <div class="columns two">
+            <pre>
+                <code><span class="magenta">.container</span> {</code>
+                <code>    display: <span class="greeny">grid</span>;</code>
+                <code>    grid-template-areas:</code>
+                <code>    <span class="greeny">"header header header"</span></code>
+                <code>    <span class="greeny">"content content sidebar"</span></code>
+                <code>    <span class="greeny">"content content sidebar"</span></code>
+                <code>    <span class="greeny">"footer footer footer"</span>;</code>
+                <code>}</code>
+            </pre>
+            <pre>
+                <code><span class="magenta">.header</span> {</code>
+                <code>    grid-area: <span class="greeny">header</span>;</code>
+                <code>}</code>
+                <code><span class="magenta">.sidebar</span> {</code>
+                <code>    grid-area: <span class="greeny">sidebar</span>;</code>
+                <code>}</code>
+                <code><span class="magenta">.content</span> {</code>
+                <code>    grid-area: <span class="greeny">content</span>;</code>
+                <code>}</code>
+            </pre>
+        </div>
+    </section>
+    
+    <section class="slide">
+        <h2>grid-template-area</h2>
+        <div class="grid-container grid-area" style="display: grid; gap: 0.5rem;">
+            <div class="grid-item" style="grid-area: header;">Header</div>
+            <div class="grid-item" style="grid-area: sidebar;">Sidebar</div>
+            <div class="grid-item" style="grid-area: content;">Content</div>
+            <div class="grid-item" style="grid-area: footer;">Footer</div>
+          </div>
+    </section>
+    
+    <section class="slide">
+        <h2>Implicit grid</h2>
+        <figure>
+            <blockquote>
+                <p>When grid items are positioned outside of these bounds,
+                    the grid container generates implicit grid tracks by adding implicit grid lines to the grid.
+                    These lines together with the explicit grid form the implicit grid.
+                    The <mark>grid-auto-rows</mark> and <mark>grid-auto-columns</mark> properties size these implicit grid tracks, as well as any explicit grid tracks created by grid-template-areas but not explicitly sized by grid-template-rows or grid-template-columns</p>
+            </blockquote>
+            <figcaption><a href="https://www.w3.org/TR/css-grid-1/#implicit-grids">CSS WG</a></figcaption>
+        </figure>
+    </section>
+
+    <section class="slide">
+        <h2>Implicit grid</h2>
+        <p><a href="https://codesandbox.io/s/implicit-grid-027ow?file=/index.html">Codesandbox 1</a></p>
+        <p><a href="https://codesandbox.io/s/grid-auto-flow-w4gwn?file=/index.html">Codesandbox 2</a></p>
+    </section>
+
+    <section class="slide">
+        <h2>👨‍💻 [Practice] Grid</h2>
+        <h3>👉 Implement Calendar component with CSS Grid</h3>
+        <a href="https://codesandbox.io/s/layout-practice-uwty8">Codesandbox</a>
+    </section>
+
+    <section class="slide">
+        <h2>CSS Grid vs CSS Flexbox</h2>
+        <picture>
+            <legend>Flexbox layout</legend>
+            <img src="https://www.w3.org/TR/css-grid-1/images/flex-layout.png" alt="">
+        </picture>
+        <picture>
+            <legend>CSS Grid layout</legend>
+            <img src="https://www.w3.org/TR/css-grid-1/images/grid-layout.png" alt="">
+        </picture>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Useful links</h2>
+        <div class="columns two">
+            <div>
+                <h3>Games</h3>
+                <ol>
+                    <li><a href="https://flexboxfroggy.com">Flexbox Froggy</a></li>
+                    <li><a href="http://cssgridgarden.com">Grid Garden</a></li>
+                </ol>
+            </div>
+            <div>
+                <h3>Articles</h3>
+                <ol>
+                    <li><a href="https://gridbyexample.com">Grid by Example by Rachel Andrew</a></li>
+                    <li><a href="https://www.smashingmagazine.com/2020/01/understanding-css-grid-container/">Understanding CSS Grid Container</a></li>
+                    <li><a href="https://tobiasahlin.com/blog/masonry-with-css/">Masonry with CSS by Tobias Ahlin Bjerrome</a></li>
+                    <li><a href="https://ishadeed.com/articles/">Blog by Ahmad Shadeed</a></li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2 class="shout">PostCSS</h2>
+    </section>
+
+    <section class="slide">
+        <h2>PostCSS is a tool for transforming CSS</h2>
+        <img width="48px" src="/slides/material/pictures/postcss-logo.svg" alt="">
+        <div class="columns two">
+            <ul>
+                <li value="👉">Polyfills</li>
+                <li value="👉">Code Minification</li>
+                <li value="👉">Linting</li>
+                <li value="👉">Mixins</li>
+                <li value="👉">Code isolation (scoping)</li>
+            </ul>
+    
+            <ul>
+                <li value="👉">Many CSS tools are built on top of it</li>
+                <li value="👉">Has a huge ecosystem of plugins</li>
+            </ul>
+        </div>
+        <p class="note"><a href="https://www.postcss.parts">A searchable catalog of PostCSS plugins</a></p>
+    </section>
+
+
+    <section class="slide">
+        <h2>Tools built with PostCSS</h2>
+        <div class="columns four">
+            <img style="object-fit: contain;" width="168px" height="168px" src="/slides/material/pictures/autoprefixer.png" alt="">
+            <img style="object-fit: contain;" width="168px" height="168px" src="/slides/material/pictures/stylelint.png" alt="">
+            <img style="object-fit: contain;" width="168px" height="168px" src="/slides/material/pictures/tailwindcss.png" alt="">
+            <img style="object-fit: contain;" width="168px" height="168px" src="/slides/material/pictures/postcss.png" alt="">
+        </div>
+        <p style="margin-top: 5rem;">... and many more!</p>
+    </section>
+
+    <section class="slide">
+        <h2><a href="https://github.com/postcss/autoprefixer">Autoprefixer</a></h2>
+        <div class="columns two">
+            <p>Adds vendor prefixes to CSS rules using values from <a href="https://caniuse.com">Can I Use</a></p>
+            <img src="/slides/material/pictures/autoprefixer-2.png" alt="">
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2><a href="https://stylelint.io">Stylelint</a></h2>
+        <p>A mighty, modern linter that helps you avoid errors and enforce conventions in your styles.</p>
+        <img style="height: 10rem;" src="/slides/material/pictures/stylelint-example.png" alt="">
+        <p class="note"><a href="https://pdfslide.tips/software/tconf-stylelint-css-.html">Андрей Ситник - Stylelint: Как и зачем линтить CSS</a></p>
+    </section>
+
+    <section class="slide">
+        <h2><a href="">TailwindCSS</a></h2>
+        <img style="height: 20rem;" src="/slides/material/pictures/tailwind-example.png" alt="">
+    </section>
+
+    <section class="slide">
+        <h2><a href="https://preset-env.cssdb.org/features">PostCSS Preset Env</a></h2>
+        <p>Lets you convert modern CSS into something most browsers can understand, determining the polyfills you need based on your targeted browsers or runtime environments, using cssdb</p>
+        <ul>
+            <li>Enables polyfilling</li>
+            <li>Extends CSS syntax</li>
+        </ul>
+    </section>
+   
+    <section class="slide">
+        <h2 class="shout">The End</h2>
+    </section>
+
+    <div class="progress"></div>
+
+    <script src="node_modules/@shower/core/dist/shower.js"></script>
+    <!-- Copyright © 2021 Yours Truly, Famous Inc. -->
+
+</body>
+</html>
